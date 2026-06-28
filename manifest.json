@@ -1,0 +1,19 @@
+{
+  "name": "Boo's Pooja",
+  "short_name": "Boo's Pooja",
+  "description": "Boo's daily pooja routine",
+  "start_url": "/boo-pooja/index.html",
+  "scope": "/boo-pooja/",
+  "display": "standalone",
+  "background_color": "#FDF8F0",
+  "theme_color": "#C4701F",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
