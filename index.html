@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Boo's Pooja">
+<meta name="theme-color" content="#C4701F">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Boo's Pooja</title>
+<style>
+:root{
+  --saffron:#C4701F;
+  --gold:#E8A825;
+  --cream:#FDF8F0;
+  --card:#FFFFFF;
+  --text:#1A0E00;
+  --sub:#8B5E2A;
+  --border:#F0E4CC;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{font-size:18px;}
+body{
+  background:var(--cream);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  min-height:100vh;
+  padding-bottom:50px;
+}
+
+/* TOP BAR */
+.topbar{
+  background:var(--saffron);
+  padding:env(safe-area-inset-top, 14px) 18px 12px;
+  padding-top:max(env(safe-area-inset-top), 14px);
+}
+.topbar-title{font-size:1.5rem;font-weight:700;color:#fff;}
+.topbar-sub{font-size:0.85rem;color:rgba(255,255,255,.85);margin-top:2px;}
+
+/* MODE BUTTONS */
+.mode-row{display:flex;background:var(--saffron);padding:0 16px 14px;gap:10px;}
+.mode-btn{
+  flex:1;padding:12px 6px;border-radius:12px;
+  font-size:0.9rem;font-weight:700;
+  border:2px solid rgba(255,255,255,.5);
+  background:transparent;color:rgba(255,255,255,.9);cursor:pointer;
+}
+.mode-btn.active{background:#fff;color:var(--saffron);border-color:#fff;}
+
+/* STICKY DAY ROW */
+.day-row{
+  display:flex;background:#fff;
+  border-bottom:2px solid var(--border);
+  padding:12px 14px;gap:8px;
+  overflow-x:auto;scrollbar-width:none;
+  position:sticky;top:0;z-index:20;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.day-row::-webkit-scrollbar{display:none;}
+.day-btn{
+  flex-shrink:0;padding:10px 18px;border-radius:22px;
+  font-size:0.9rem;font-weight:700;
+  border:2px solid var(--border);background:var(--cream);color:var(--sub);cursor:pointer;
+}
+.day-btn.active{background:var(--saffron);color:#fff;border-color:var(--saffron);}
+
+/* TIER ROW */
+.tier-row{
+  display:flex;background:#fff;
+  border-bottom:2px solid var(--border);
+  padding:12px 14px;gap:10px;
+}
+.tier-btn{
+  flex:1;padding:12px 4px;border-radius:12px;
+  font-size:0.85rem;font-weight:700;
+  border:2px solid var(--border);background:var(--cream);
+  color:#888;cursor:pointer;text-align:center;line-height:1.5;
+}
+.tier-btn.t1.active{background:#1B7A4E;color:#fff;border-color:#1B7A4E;}
+.tier-btn.t2.active{background:var(--saffron);color:#fff;border-color:var(--saffron);}
+.tier-btn.t3.active{background:#5B3F8C;color:#fff;border-color:#5B3F8C;}
+
+/* CONTENT */
+.content{padding:16px;display:flex;flex-direction:column;gap:18px;}
+
+/* CARD */
+.card{background:var(--card);border-radius:20px;border:1px solid var(--border);box-shadow:0 3px 12px rgba(0,0,0,.07);overflow:hidden;}
+
+/* CARD HEADER — saffron banner, clearly distinct */
+.card-head{
+  background:var(--saffron);
+  display:flex;align-items:center;gap:14px;
+  padding:16px 18px;
+}
+.card-icon{font-size:1.8rem;flex-shrink:0;line-height:1;}
+.card-title{font-size:1.2rem;font-weight:800;color:#fff;letter-spacing:.01em;}
+.card-sub{font-size:0.8rem;color:rgba(255,255,255,.88);margin-top:3px;line-height:1.4;}
+
+/* NOTE INSIDE CARD */
+.card-note{
+  font-size:0.85rem;color:#5a3010;
+  background:#FFF8ED;padding:13px 16px;
+  border-left:4px solid var(--gold);
+  margin:14px 14px 4px;
+  border-radius:0 12px 12px 0;line-height:1.7;
+}
+
+/* MANTRA ITEMS */
+.item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:15px 16px;
+  border-bottom:1px solid #FAF3E8;
+}
+.item:last-child{border-bottom:none;padding-bottom:18px;}
+.item-num{
+  min-width:32px;height:32px;border-radius:50%;
+  background:var(--cream);font-size:0.8rem;font-weight:800;
+  color:var(--saffron);display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;margin-top:2px;
+  border:2px solid var(--border);
+}
+.item-body{flex:1;min-width:0;}
+.item-mantra{
+  font-size:1rem;font-weight:700;color:var(--text);
+  line-height:1.55;word-break:break-word;
+}
+.item-why{
+  font-size:0.85rem;color:#6B4820;
+  margin-top:6px;line-height:1.6;word-break:break-word;
+}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{font-size:0.78rem;font-weight:700;padding:4px 12px;border-radius:8px;}
+.tag-yt{background:#FDECEA;color:#B03030;border:1px solid #E07060;text-decoration:none;display:inline-block;}
+.tag-day{background:#EEF2FF;color:#3730A3;border:1px solid #A5B4FC;}
+.tag-opt{background:#EDFAEF;color:#1B5E20;border:1px solid #6FCF97;}
+
+/* RULES */
+.rule-sec{
+  font-size:0.78rem;font-weight:800;color:var(--saffron);
+  text-transform:uppercase;letter-spacing:.08em;
+  padding:14px 18px 6px;
+}
+.rule-item{display:flex;align-items:flex-start;gap:12px;padding:11px 18px;}
+.rule-item:last-child{padding-bottom:18px;}
+.rule-dot{width:9px;height:9px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+.rule-text{font-size:0.95rem;color:var(--text);line-height:1.65;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">🙏 Boo's Pooja</div>
+  <div class="topbar-sub" id="topbar-sub">Recovery Edition</div>
+</div>
+
+<div class="mode-row">
+  <button class="mode-btn active" onclick="setMode('recovery',this)">🌿 Recovery</button>
+  <button class="mode-btn" onclick="setMode('post',this)">🌺 Post Recovery</button>
+</div>
+
+<div class="day-row">
+  <button class="day-btn active" onclick="setDay('all',this)">All</button>
+  <button class="day-btn" onclick="setDay('mon',this)">Mon</button>
+  <button class="day-btn" onclick="setDay('tue',this)">Tue</button>
+  <button class="day-btn" onclick="setDay('wed',this)">Wed</button>
+  <button class="day-btn" onclick="setDay('thu',this)">Thu</button>
+  <button class="day-btn" onclick="setDay('fri',this)">Fri</button>
+  <button class="day-btn" onclick="setDay('sat',this)">Sat</button>
+  <button class="day-btn" onclick="setDay('sun',this)">Sun</button>
+</div>
+
+<div class="tier-row" id="tier-row">
+  <button class="tier-btn t1" onclick="setTier(1,this)">🌿 Light<br><small>5–10 mins</small></button>
+  <button class="tier-btn t2 active" onclick="setTier(2,this)">🌸 Medium<br><small>10–20 mins</small></button>
+  <button class="tier-btn t3" onclick="setTier(3,this)">🌺 Good<br><small>20–30 mins</small></button>
+</div>
+
+<div class="content" id="content"></div>
+
+<script>
+let mode='recovery', day='all', tier=2;
+const DL={mon:'Monday',tue:'Tuesday',wed:'Wednesday',thu:'Thursday',fri:'Friday',sat:'Saturday',sun:'Sunday'};
+
+const kuber=[
+  {m:'Om Kuberaya Namah (11x)',w:'Name mantra — devotional opening, establishes the connection'},
+  {m:'Om Shreem Hreem Kleem Shreem Kleem Vitteshvaraya Namah (11x)',w:'Beej mantra — lord of all treasures and material reality'},
+  {m:'Om Yakshaya Kuberaya Vaishravanaya Dhanadhanyadhipataye Dhanadhanyasamriddhim Me Dehi Dapaya Svaha (11x)',w:'Full invocation — calls him by all his names with a direct request for abundance',d:'108x Thu'}
+];
+
+const dayExtra={
+  mon:[{m:'Om Chandraya Namah (27x)',w:"Monday is Chandra's day — enhanced count for emotional healing",d:'27x Mon'}],
+  tue:[{m:'Sankat Mochan (1x)',w:'Tuesday — extra Hanuman protection'},{m:'Bajrang Baan (1x)',w:'If energy allows',opt:'Optional'}],
+  wed:[{m:'Om Bum Budhaya Namaha (11x)',w:'Wednesday — Mercury for mental clarity during recovery'}],
+  thu:[{m:'Om Gram Greem Groum Sah Gurave Namah (108x)',w:'Thursday — full Guru/Jupiter mala for healing grace',d:'108x'},{m:'Om Namo Bhagavate Vasudevaya (12x)',w:"Vishnu blessing on Guru's day"}],
+  fri:[{m:'Om Shukraya Namah (108x)',w:'Friday — full Venus mala, grace of healing',d:'108x'},{m:'Durga Chalisa (1x)',w:'Friday Shakti focus'}],
+  sat:[{m:'Om Sham Shanicharaya Namaha (108x)',w:'Saturday — full Shani mala, pacify Saturn',d:'108x'},{m:'Sankat Mochan (1x)',w:'Saturday Hanuman protection'}],
+  sun:[{m:'Om Hraam Hreem Hroum Sah Suryaya Namaha (108x)',w:'Sunday — full Surya beej mala. Face sunlight if possible.',d:'108x'},{m:'Aditya Hridayam (1x)',w:'Most auspicious on Sundays — listen if chanting feels too much',yt:'MS Subbulakshmi',opt:'If strong'}]
+};
+
+const postDayExtra={
+  mon:[{m:'Om Chandraya Namah (27x)',w:"Monday — Chandra's day",d:'27x'}],
+  tue:[{m:'Sankat Mochan (1x)',w:'Hanuman protection'},{m:'Bajrang Baan (1x)',w:'Full Tuesday sequence'},{m:'Hanuman Mangal Kavach (1x)',w:'Complete the Tuesday armor'}],
+  wed:[{m:'Om Bum Budhaya Namaha (11x)',w:'Mercury / Wednesday'},{m:'Ganesh Atharvashirsha (1x)',w:'Wednesday is Ganesh day',opt:'Optional'}],
+  thu:[{m:'Om Gram Greem Groum Sah Gurave Namah (108x)',w:'Full Guru mala',d:'108x'},{m:'Om Namo Bhagavate Vasudevaya (108x)',w:'Vishnu on Guru day',d:'108x'},{m:'Ramchandra Kripalu Bhajman (1x)',w:'Thursday Vishnu focus'}],
+  fri:[{m:'Om Shukraya Namah (108x)',w:'Full Venus mala',d:'108x'},{m:'Durga Chalisa (1x)',w:'Friday Shakti'}],
+  sat:[{m:'Om Sham Shanicharaya Namaha (108x)',w:'Full Shani mala — evening preferred',d:'108x'},{m:'Sankat Mochan (1x)',w:'Hanuman protection'},{m:'Bajrang Baan (1x)',w:'Saturday armor'},{m:'Hanuman Mangal Kavach (1x)',w:'Complete Saturday sequence'}],
+  sun:[{m:'Om Hraam Hreem Hroum Sah Suryaya Namaha (108x)',w:'Full Surya beej mala',d:'108x'},{m:'Aditya Hridayam (1x)',w:'Most auspicious on Sundays',yt:'MS Subbulakshmi'},{m:'Om Namo Narayanaya (11x)',w:'Sunday addition'},{m:'Om Shree Shyam Devay Namah (11x)',w:'Sunday Shyam focus'}]
+};
+
+function tagHTML(it){
+  if(!it.yt&&!it.d&&!it.opt) return '';
+  let t='<div class="tags">';
+  if(it.yt){
+    const ytUrls = {"Hariharan": "https://www.youtube.com/results?search_query=Hanuman+Chalisa+Hariharan", "Uma Mohan": "https://www.youtube.com/results?search_query=Om+Namah+Shivaya+Uma+Mohan", "Pt. Jasraj": "https://www.youtube.com/results?search_query=Gayatri+Mantra+Pt+Jasraj", "MS Subbulakshmi": "https://www.youtube.com/results?search_query=Aditya+Hridayam+MS+Subbulakshmi", "Shankar Sahney": "https://www.youtube.com/results?search_query=Mahamrityunjaya+Mantra+Shankar+Sahney", "Lata Mangeshkar": "https://www.youtube.com/results?search_query=Aarti+Jagdish+Hare+Lata+Mangeshkar", "Surya mantra": "https://www.youtube.com/results?search_query=Surya+mantra+Om+Suryaya+Namaha", "Any gentle version": "https://www.youtube.com/results?search_query=Ganesh+Aarti+gentle"};
+    const url = ytUrls[it.yt] || 'https://www.youtube.com/results?search_query='+encodeURIComponent(it.yt);
+    t+=`<a href="${url}" target="_blank" rel="noopener" class="tag tag-yt">▶ ${it.yt}</a>`;
+  }
+  if(it.d)  t+=`<span class="tag tag-day">${it.d}</span>`;
+  if(it.opt)t+=`<span class="tag tag-opt">${it.opt}</span>`;
+  return t+'</div>';
+}
+
+function itemHTML(it,i){
+  return `<div class="item">
+    <div class="item-num">${i+1}</div>
+    <div class="item-body">
+      <div class="item-mantra">${it.m}</div>
+      ${it.w?`<div class="item-why">${it.w}</div>`:''}
+      ${tagHTML(it)}
+    </div>
+  </div>`;
+}
+
+function card(icon,title,sub,note,arr){
+  return `<div class="card">
+    <div class="card-head">
+      <div class="card-icon">${icon}</div>
+      <div><div class="card-title">${title}</div><div class="card-sub">${sub}</div></div>
+    </div>
+    ${note?`<div class="card-note">${note}</div>`:''}
+    ${arr.map((it,i)=>itemHTML(it,i)).join('')}
+  </div>`;
+}
+
+function ruleCard(title,sections){
+  let h=`<div class="card">
+    <div class="card-head"><div class="card-icon">📋</div><div><div class="card-title">${title}</div></div></div>`;
+  sections.forEach(s=>{
+    h+=`<div class="rule-sec">${s.title}</div>`;
+    s.items.forEach(t=>h+=`<div class="rule-item"><div class="rule-dot" style="background:${s.color}"></div><div class="rule-text">${t}</div></div>`);
+  });
+  return h+'</div>';
+}
+
+function recoveryHTML(){
+  const d=day, t=tier;
+  const extras=(d!=='all'&&dayExtra[d])?dayExtra[d]:[];
+  const dayNote=d!=='all'&&dayExtra[d]?`${DL[d]} special additions are shown at the bottom of the Midday section.`:'';
+
+  const s1=[
+    {m:'Om Gam Ganapataye Namah (11x)',w:'Always first — Ganesha removes all obstacles'},
+    {m:'Om Suryaya Namaha (11x)',w:'Sun in 12th house — strengthen vitality',yt:'Surya mantra'},
+    {m:'Om Namah Shivaya (11x)',w:'Shiva Vaidyanatha — the healing lord',yt:'Uma Mohan'}
+  ];
+  const s2=[
+    {m:'Om Gam Ganapataye Namah (11x)',w:'Always first — Ganesha removes obstacles'},
+    {m:'Om Gauri Putraye Ganapatay Namah (11x)',w:'Second Ganesha mantra'},
+    {m:'Om Suryaya Namaha (11x)',w:'Sun in 12th house — strengthen vitality'},
+    {m:'Om Hraam Hreem Hroum Sah Suryaya Namaha (11x)',w:'Surya beej — deeper solar energising',d:'Beej'},
+    {m:'Om Chandraya Namah (11x)',w:'Moon — emotional calm during recovery'},
+    {m:'Om Hreem Katyayanyai Namah (11x)',w:'Devi Katyayani — sixth form of Durga, protection'},
+    {m:'Om Namah Shivaya (11x)',w:'Shiva Vaidyanatha — healing lord',yt:'Uma Mohan'}
+  ];
+  const s3=[
+    {m:'Om Gam Ganapataye Namah (11x)',w:'Always first — Ganesha removes obstacles'},
+    {m:'Om Gauri Putraye Ganapatay Namah (11x)',w:'Second Ganesha mantra'},
+    {m:'Om Suryaya Namaha (11x)',w:'Sun in 12th house — strengthen vitality'},
+    {m:'Om Hraam Hreem Hroum Sah Suryaya Namaha (11x)',w:'Surya beej mantra',d:'Beej'},
+    {m:'Aditya Hridayam (1x)',w:'31 verses from the Ramayana — listen if chanting feels too much',yt:'MS Subbulakshmi',opt:'Strong days'},
+    {m:'Om Chandraya Namah (11x)',w:'Emotional healing and mental calm'},
+    {m:'Om Namo Bhagavate Dakshinamurtaye (11x)',w:'Adi Guru — calms anxiety about recovery'},
+    {m:'Gayatri Mantra (11x)',w:'Wisdom and clarity of mind',yt:'Pt. Jasraj'},
+    {m:'Om Hreem Katyayanyai Namah (11x)',w:'Devi Katyayani — sixth form of Durga, protection'},
+    {m:'Om Namah Shivaya (11x)',w:'Shiva Vaidyanatha — healer of healers',yt:'Uma Mohan'}
+  ];
+
+  const m1=[{m:'Hanuman Chalisa (1x)',w:'Rahu in 5th house — Hanuman is supreme authority over Rahu. Listening counts fully.',yt:'Hariharan'}];
+  const m2=[
+    {m:'Hanuman Chalisa (1x)',w:'Rahu in 5th house — protection and disciplined focus',yt:'Hariharan'},
+    {m:'Om Hreem Katyayanyai Namah (11x)',w:'Devi Katyayani — protection, especially meaningful for women'},
+    ...kuber,
+    {m:'Om Shreem Mahalakshmyai Namah (11x)',w:'Lakshmi — abundance and wellbeing'}
+  ];
+  const m3=[
+    {m:'Hanuman Chalisa (1x)',w:'Rahu in 5th house — disciplined protection',yt:'Hariharan'},
+    {m:'Om Gram Greem Groum Sah Gurave Namah (11x)',w:"Jupiter's grace for healing and wisdom"},
+    {m:'Om Hreem Katyayanyai Namah (11x)',w:'Devi Katyayani — protection and Shakti'},
+    {m:'Om Shukraya Namah (11x)',w:'Venus — grace, beauty, and restoration'},
+    ...kuber,
+    {m:'Om Shreem Mahalakshmyai Namah (11x)',w:'Lakshmi — abundance and wellbeing'}
+  ];
+
+  const e1=[{m:'Ganesh Aarti (listen)',w:'Ganesha clears the path — new beginnings and the 2027 move',yt:'Any gentle version'}];
+  const e2=[
+    {m:'Ganesh Aarti (1x)',w:'Clears obstacles for the 2027 move',yt:'Any gentle version'},
+    {m:'Om Namah Shivaya (11x)',w:'Evening Shiva — settling and grounding'},
+    {m:'Om Sham Shanicharaya Namaha (11x)',w:"Saturn at evening — his natural time. Pacifies karma."}
+  ];
+  const e3=[
+    {m:'Ganesh Aarti (1x)',w:'Clears path for major life transitions',yt:'Any gentle version'},
+    {m:'Om Bum Budhaya Namaha (11x)',w:'Mercury — clear thinking about plans'},
+    {m:'Om Namah Shivaya (11x)',w:'Shiva — grounding and peace'},
+    {m:'Om Sham Shanicharaya Namaha (11x)',w:"Shani at evening — aligns karma"},
+    {m:'Jagdish Hare Aarti (listen)',w:'Beautiful closing to the day',yt:'Lata Mangeshkar'}
+  ];
+
+  const n1=[{m:'Maha Mrityunjaya — listen softly (15–20 mins)',w:'Play as Boo drifts to sleep. Deep healing and grounding.',yt:'Shankar Sahney'}];
+  const n2=[
+    {m:'Maha Mrityunjaya (27x)',w:'One quarter of a full mala — complete and valid',yt:'Shankar Sahney'},
+    {m:'Kshama Prarthana',w:'Forgiveness prayer — closes the day gently'}
+  ];
+  const n3=[
+    {m:'Maha Mrityunjaya (108x — full mala)',w:'As prescribed. If tired, 27x is equally complete.',d:'Full mala'},
+    {m:'Om Namah Shivaya (11x)',w:'Shiva as protector through the night'},
+    {m:'Kshama Prarthana',w:'Close with forgiveness — any errors in practice are released'}
+  ];
+
+  return [
+    card('🌅','Sunrise','First hour of morning','Boo can stay lying down or sit up as comfortable. Face a window if possible.',[s1,s2,s3][t-1]),
+    card('☀️','Midday','12 PM – 2 PM · Boo\'s peak time',dayNote,[...[m1,m2,m3][t-1],...extras]),
+    card('🌇','Evening','Sunset','Sit near a window. Light a small diya if possible.',[e1,e2,e3][t-1]),
+    card('🌙','Night','Before sleep','Lying down is completely fine. The tradition makes an explicit exception for the ill.',[n1,n2,n3][t-1]),
+    ruleCard('Recovery Rules',[
+      {title:'Always OK Right Now',color:'#1B7A4E',items:['Listening counts fully — hearing is as valid as chanting','Lying down is fine — the tradition allows this during illness','Falling asleep mid-chant is considered a blessing','No fasting rules — eat what the body needs','No fixed direction — face whichever way is comfortable','Playing mantras softly while resting is always valid','Light tier with full heart beats any heavy tier done while tired']},
+      {title:'Missed a Day',color:'#C4701F',items:['Om Namo Bhagavate (1x) + one bow is enough to maintain continuity']}
+    ])
+  ].join('');
+}
+
+function postHTML(){
+  const d=day;
+  const extras=(d!=='all'&&postDayExtra[d])?postDayExtra[d]:[];
+  const dayNote=d!=='all'&&postDayExtra[d]?`${DL[d]} additions shown below.`:'';
+
+  const aartiMap={
+    mon:[{m:'Ganesha Aarti'},{m:'Shiva Aarti'},{m:'Jagdish Hare'}],
+    tue:[{m:'Ganesha Aarti'},{m:'Mangalkari Ki Aarti'},{m:'Hanuman Ji Aarti'},{m:'Jagdish Hare'}],
+    wed:[{m:'Ganesha Aarti'},{m:'Jagdish Hare'}],
+    thu:[{m:'Ganesha Aarti'},{m:'Vishnu / Lakshmi Narayan Aarti'},{m:'Jagdish Hare'}],
+    fri:[{m:'Ganesha Aarti'},{m:'Ambe Gauri / Kali Aarti'},{m:'Santoshi Maa Aarti',w:'Avoid sour foods today'},{m:'Laxmi / Saraswati Aarti'},{m:'Jagdish Hare'}],
+    sat:[{m:'Ganesha Aarti'},{m:'Mangalkari Ki Aarti'},{m:'Hanuman Ji Aarti'},{m:'Khatu Shyamji Aarti'},{m:'Jagdish Hare'}],
+    sun:[{m:'Ganesha Aarti'},{m:'Kunjbihari Ki Aarti'},{m:'Khatu Shyamji Aarti'},{m:'Jagdish Hare',w:'Let the stronger energy — Krishna or Shyam — lead naturally'}]
+  };
+  const eveArr=d!=='all'&&aartiMap[d]?aartiMap[d]:[{m:'Tap a day above to see that day\'s Aarti sequence',w:'Each day has its own specific order'}];
+
+  return [
+    card('🌅','Sunrise — Foundation','Sit facing East or the deity','Sankalp first — state your intention. Then Surya Arghya — offer water to the sun.',[
+      {m:'Guru Mantra: Om Guru Brahma Gurur Vishnu Gurur Devo Maheshwaraha Guru Saakshat Parabrahma Tasmai Shri Gurave Namah (1x)',w:'Opens everything — honours the guru lineage'},
+      {m:'Dakshinamurthy: Om Namo Bhagavate Dakshinamurtaye (27x)',w:'Shiva as Adi Guru. 108x on Thursdays.',d:'108x Thu'},
+      {m:'Ganesha: Om Gam Ganapataye Namah (11x)',w:'Always first after opening — removes obstacles'},
+      {m:'Ganesha: Om Gauri Putraye Ganapatay Namah (11x)'},
+      {m:'Surya Arghya — offer water to the sun'},
+      {m:'Surya: Om Suryaya Namaha (11x)',w:'Sun in 12th house — strengthen vitality every day'},
+      {m:'Surya Beej: Om Hraam Hreem Hroum Sah Suryaya Namaha (11x)',w:'108x on Sundays',d:'108x Sun'},
+      {m:'Chandra: Om Chandraya Namah (11x)',w:'27x on Mondays',d:'27x Mon'},
+      {m:'Gayatri Mantra (11x)',w:'Best at dawn light — sandhya kaala'},
+      {m:'Guru Beej: Om Gram Greem Groum Sah Gurave Namah (11x)',w:'108x on Thursdays',d:'108x Thu'},
+      {m:'Shiva: Om Namah Shivaya (11x)'},
+      {m:'Devi Katyayani: Om Hreem Katyayanyai Namah (11x)',w:'Sixth form of Durga — protection and Shakti'},
+      {m:'Shukra: Om Shukraya Namah (11x)',w:'108x on Fridays',d:'108x Fri'},
+      {m:'Budha: Om Bum Budhaya Namaha (11x)',w:'108x on Wednesdays',d:'108x Wed'},
+      {m:'Shani: Om Sham Shanicharaya Namaha (11x)',w:'108x on Saturdays',d:'108x Sat'},
+      ...kuber,
+      {m:'Lakshmi: Om Shreem Mahalakshmyai Namah (11x)',w:'Abundance and grace'}
+    ]),
+    card('☀️','Midday Chalisa','12 PM – 2 PM · Your peak time',dayNote,[
+      {m:'Hanuman Chalisa (1x)',w:'Rahu in 5th house — daily protection',yt:'Hariharan'},
+      {m:'Om Gram Greem Groum Sah Gurave Namah (11x)',w:"Jupiter's wisdom and grace"},
+      {m:'Om Shreem Mahalakshmyai Namah (11x)',w:'Lakshmi — abundance and wellbeing'},
+      ...extras
+    ]),
+    card('🌇','Evening Aarti','Sunset · Stand, light diya','Face the deity. Light the lamp. Aarti closes the active practice of the day.',eveArr),
+    card('🌙','Night','Before sleep · Sit upright','Face East or the deity. Sit upright now that the body has recovered.',[
+      {m:'Maha Mrityunjaya (108x)',w:'Saturn-Jupiter Vargottam — grounds consciousness. 27x on lighter nights.',d:'Full mala'},
+      {m:'Om Namah Shivaya (11x)',w:'Shiva as protector through the night'},
+      {m:'Kshama Prarthana',w:'Close with forgiveness — any errors in practice are released'}
+    ]),
+    ruleCard('Post Recovery Rules',[
+      {title:'Now Restored',color:'#C4701F',items:['Sit upright during chanting — affects the flow of prana','Face East or face the deity — direction matters again','Friday fasting rule returns — no sour food for Santoshi Maa Aarti','Sankalp at opening and Kshama Prarthana at closing — always']},
+      {title:'Always Valid Forever',color:'#1B7A4E',items:['Listening is always a valid form of devotion at any stage of life','Playing mantras softly in the background all day is always beautiful','The three tiers are worth keeping — life always has light days and good days','Missed a day: Om Namo Bhagavate (1x) + one bow maintains continuity']}
+    ])
+  ].join('');
+}
+
+function render(){
+  document.getElementById('content').innerHTML = mode==='recovery' ? recoveryHTML() : postHTML();
+  document.getElementById('tier-row').style.display = mode==='recovery' ? 'flex' : 'none';
+  document.getElementById('topbar-sub').textContent = mode==='recovery' ? 'Recovery Edition' : 'Full Practice';
+  window.scrollTo(0,0);
+}
+
+function setMode(m,el){
+  mode=m;
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setDay(d,el){
+  day=d;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+function setTier(t,el){
+  tier=t;
+  document.querySelectorAll('.tier-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  render();
+}
+
+// Register service worker for offline use
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+render();
+</script>
+</body>
+</html>
